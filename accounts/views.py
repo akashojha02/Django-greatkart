@@ -33,7 +33,7 @@ def register(request):
             user.phone_number = phone_number
             user.save()
             # User Activation
-            current_site = get_current_site(request)
+            current_site = get_current_site(request)            
             mail_subject = 'Please Activate Your Account'
             message = render_to_string('accounts/account_verification_email.html', {
                 'user':user,

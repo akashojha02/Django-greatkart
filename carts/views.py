@@ -186,8 +186,11 @@ def cart(request, tax = 0, total=0, quantity=0, grand_total=0, cart_items=None):
 @login_required(login_url='login')
 def checkout(request, tax = 0, total=0, quantity=0, grand_total=0, cart_items=None):
     try:
-        cart = Cart.objects.get(cart_id=_cart_id(request))
-        cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.filter(user= request.user)
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
@@ -196,7 +199,6 @@ def checkout(request, tax = 0, total=0, quantity=0, grand_total=0, cart_items=No
             
     except ObjectDoesNotExist:
         pass
-
     context = {
         "total":total,
         'quantity':quantity,
