@@ -2,10 +2,11 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from category.models import Category
-from store.models import Product
+from store.models import Product, ReviewRating
 from carts.models import CartItem
 from carts.views import _cart_id
 from django.core.paginator import EmptyPage,Paginator,PageNotAnInteger
+from .forms import ReviewForm
 
 # Create your views here.
 
@@ -64,3 +65,10 @@ def search(request):
     }
 
     return render(request, 'store/store.html', context )
+
+def submit_review(request, product_id):
+    if request.method == 'POST':
+        try:
+            reviews = ReviewRating.objects.get(user__id=request.user.id,product__id=product_id) 
+        except:
+            pass
