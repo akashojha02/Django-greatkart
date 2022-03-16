@@ -72,8 +72,6 @@ def payments(request):
         'transID': payment.payment_id,
 
     }
-
-
     return JsonResponse(data)
 
 
